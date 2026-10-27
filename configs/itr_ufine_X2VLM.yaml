@@ -1,0 +1,82 @@
+image_root: 'data/UFineBench/UFine6926/images'
+image_root_test: 'data/UFineBench/UFine3C/images'
+test_file: 'data/UFineBench/UFine3C/UFine3C_Annotations.json'
+
+train_file:  [
+	'data/UFineBench/UFine6926/UFine6926_Annotations.json',
+]
+
+ifSpecial: True
+
+## Image Encoder
+vision_config: 'configs/config_beit2_base.json' 
+h: 224
+w: 224
+
+## Text Encoder
+text_config: 'configs/config_bert.json'
+text_encoder: 'bert-base-uncased'
+text_num_hidden_layers: 18
+text_fusion_start_at: 12
+
+use_beit_v2: True
+image_res: 224
+patch_size: 16
+sdm:
+  use_sdm: False
+
+id:
+  use_id: False
+
+## Training
+load_params: False
+load_pretrained: True
+
+max_words: 168
+max_tokens: 168
+eda_p: 1
+erasing_p: 0.6
+
+batch_size_train: 26
+batch_size_test: 26
+batch_size_test_text: 150
+
+embed_dim: 256 
+itc_dp: 0.5
+temp: 0.07
+label_smooth: 0.2
+
+## mlm loss
+mlm:
+  is_mlm: True
+
+mask_prob: 0.25
+max_masks: 10
+skipgram_prb: 0.2
+skipgram_size: 3
+mask_whole_word: True
+
+itm:
+  weight: 4.0
+  use_mask: True
+
+mim:
+  weight: 4.0
+  use_mim: True
+  mask_ratio: 0.5
+
+optimizer: {opt: adamW, lr: 2.5e-5, weight_decay: 0.01, lr_mult: 2}
+schedular: {sched: step, lr: 2.5e-5, epochs: 30, num_warmup_steps: 500}
+
+k_test: 128
+
+icfg_rstp: False
+
+be_hard: False
+be_pose_img: False
+pose_conv: False
+
+eda: True
+
+vision_width: 768
+text_width: 768

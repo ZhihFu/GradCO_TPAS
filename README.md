@@ -1,7 +1,7 @@
 <a id="top"></a>
 
 <div align="center">
-  <img src="gradco-logo.png" alt="GradCO logo" width="150" />
+  <img src="gradco-logo.png" alt="GradCO logo" width="210" />
   <h1>GradCO: Behavior-Aware Gradient-Conflict Offloading for Text-Based Person Anomaly Search</h1>
   <p>
     <a href="https://zhihfu.github.io/"><strong>Zhiheng Fu</strong></a><sup>1</sup> &nbsp;&nbsp;
@@ -25,7 +25,7 @@
     <a href="https://arxiv.org/abs/2610.37267">Paper</a> ·
     <a href="#-method">Method</a> ·
     <a href="#-results">Results</a> ·
-    <a href="#-getting-started">Get Started</a>
+    <a href="#-quick-start">Quick Start</a>
   </p>
 </div>
 
@@ -49,23 +49,6 @@ GradCO introduces three complementary components: Behavior-Aware Mixture-of-Expe
 - **[2026-10-27]** 🚀 The GradCO preprint is available on [arXiv](https://arxiv.org/abs/2610.37267).
 - **[2026-10-27]** 💻 The GradCO code is released in this repository.
 
-## 📑 Table of Contents
-
-- [Introduction](#-introduction)
-- [Abstract](#-abstract)
-- [News and Updates](#-news-and-updates)
-- [Method](#-method)
-- [Benchmarks](#-benchmarks)
-- [Results](#-results)
-- [Getting Started](#-getting-started)
-- [Data Preparation](#-data-preparation)
-- [Training](#-training)
-- [Evaluation](#-evaluation)
-- [Project Structure](#-project-structure)
-- [Citation](#-citation)
-- [Acknowledgements](#-acknowledgements)
-- [License](#-license)
-
 ## 🧠 Method
 
 <div align="center">
@@ -82,6 +65,24 @@ The implementation is in [`models/model_X2VLM.py`](models/model_X2VLM.py). GradC
 | **HIA** | Uses query-conditioned weights to combine expert similarities and features for retrieval. |
 
 The supplied configurations use BEiT-v2 as the image encoder and BERT as the text encoder. Training combines contrastive, image-text matching, and masked language modeling losses with conflict-offload regularization.
+
+## 📑 Table of Contents
+
+- [Introduction](#-introduction)
+- [Abstract](#-abstract)
+- [News and Updates](#-news-and-updates)
+- [Method](#-method)
+- [Benchmarks](#-benchmarks)
+- [Results](#-results)
+- [Getting Started](#-getting-started)
+- [Project Structure](#-project-structure)
+- [Data Preparation](#-data-preparation)
+- [Quick Start](#-quick-start)
+- [Acknowledgements](#-acknowledgements)
+- [Contact](#-contact)
+- [Related Projects](#-related-projects)
+- [Citation](#-citation)
+- [License](#-license)
 
 ## 📊 Benchmarks
 
@@ -124,6 +125,13 @@ The paper reports the following scores in its `Avg` column:
 
 ## 📦 Getting Started
 
+Clone the repository:
+
+```bash
+git clone https://github.com/ZhihFu/GradCO_TPAS.git
+cd GradCO_TPAS
+```
+
 ### Requirements
 
 - Python 3.10
@@ -158,6 +166,24 @@ bert-base-uncased/
 
 Set model and tokenizer paths in the selected task YAML and pass the pretrained checkpoint with `--checkpoint`. For offline use, point `text_encoder` to a local directory whose name contains `bert-base-uncased`, as required by the current tokenizer selection logic. The pretrained loader expects projection weights such as `text_proj.weight` and `text_proj.bias`; review its loading messages to confirm checkpoint compatibility.
 
+## 📂 Project Structure
+
+```text
+GradCO_TPAS/
+├── gradco-logo.png         # Project logo
+├── GradCO-Intro.png        # Motivation and introduction figure
+├── GradCO.png              # GradCO framework figure
+├── configs/                # TPAS and TIPR experiment configurations
+├── dataset/                # Text-based person retrieval data loaders
+├── dataset_TPS/            # PAB / TPAS data loaders
+├── models/
+│   └── model_X2VLM.py       # GradCO model
+├── Search_TPS_X2VLM.py      # Training and task orchestration
+├── run_TPS.py               # Distributed launcher
+├── eval.py                  # TIPR evaluation metrics
+└── eval_TPS.py              # TPAS evaluation metrics
+```
+
 ## 💾 Data Preparation
 
 Obtain PAB images and annotations from the original [PAB/CMP project](https://github.com/Shuyu-XJTU/CMP) and follow its dataset terms. The supplied PAB configuration uses training shards 0 through 7.
@@ -184,7 +210,9 @@ For each task, prepare the corresponding image files and JSON annotations, then 
 
 The standalone PAB evaluation loop uses `--data_root` for annotation paths; this does not rewrite image or training paths in the YAML. Pass it explicitly rather than relying on the `/data/PAB` default.
 
-## 🚀 Training
+## 🚀 Quick Start
+
+### Training
 
 Run commands from the repository root. Single-GPU PAB training:
 
@@ -206,29 +234,28 @@ For four GPUs, use `--devices 0,1,2,3 --nproc 4`. Use one process per selected G
 
 Training evaluates the configured test set each epoch and writes `log.txt`, `config.yaml`, and `checkpoint_best.pth` under `--output_dir`. The best checkpoint is selected by test R@1. The saved YAML is written before command-line overrides, so retain the launch command alongside your results.
 
-## 🧪 Evaluation
+### Evaluation
 
 Training reports R@1, R@5, R@10, mAP, and mINP. The standalone `--evaluate` branch is currently PAB-specific: it iterates over the original, OOD, and configured Multi-Weather annotation files regardless of the selected task. It is not a standalone evaluation entry point for the other TIPR benchmarks.
 
 The current evaluation entry point uses the pretrained-weight remapping loader rather than a dedicated trained-checkpoint loader. Since GradCO inherits the base text projection, its state dictionary includes `text_proj` keys; however, the loader also remaps text encoder weights and overwrites `tl_text_proj` from `text_proj`. Verify trained-checkpoint restoration before relying on standalone evaluation results.
 
-## 📂 Project Structure
+## 🙏 Acknowledgements
 
-```text
-GradCO_TPAS/
-├── gradco-logo.png         # Project logo
-├── GradCO-Intro.png        # Motivation and introduction figure
-├── GradCO.png              # GradCO framework figure
-├── configs/                # TPAS and TIPR experiment configurations
-├── dataset/                # Text-based person retrieval data loaders
-├── dataset_TPS/            # PAB / TPAS data loaders
-├── models/
-│   └── model_X2VLM.py       # GradCO model
-├── Search_TPS_X2VLM.py      # Training and task orchestration
-├── run_TPS.py               # Distributed launcher
-├── eval.py                  # TIPR evaluation metrics
-└── eval_TPS.py              # TPAS evaluation metrics
-```
+This implementation builds on [X²-VLM](https://arxiv.org/abs/2211.12402) and uses the [PAB/CMP](https://github.com/Shuyu-XJTU/CMP) benchmark. Please follow the corresponding code, checkpoint, and dataset terms.
+
+## ✉️ Contact
+
+For questions or feedback, please open an [issue](https://github.com/ZhihFu/GradCO_TPAS/issues) or contact [Zhiheng Fu](mailto:fuzhiheng8@gmail.com).
+
+## 🔗 Related Projects
+
+Selected open-source projects from our team:
+
+- **[Air-Know](https://github.com/iLearn-Lab/CVPR26-Air-Know)** — knowledge-calibrated robust composed image retrieval (CVPR 2026).
+- **[ConeSep](https://github.com/iLearn-Lab/CVPR26-ConeSep)** — robust noise unlearning for composed image retrieval (CVPR 2026).
+- **[TEMA](https://github.com/iLearn-Lab/ACL26-TEMA)** — a benchmark for multi-modification composed image retrieval (ACL 2026).
+- **[INTENT](https://github.com/iLearn-Lab/AAAI26-INTENT)** — noise mitigation for robust composed image retrieval (AAAI 2026).
 
 ## 📝 Citation
 
@@ -245,10 +272,6 @@ If you use this work, please cite the paper:
   url = {https://arxiv.org/abs/2610.37267}
 }
 ```
-
-## 🙏 Acknowledgements
-
-This implementation builds on [X²-VLM](https://arxiv.org/abs/2211.12402) and uses the [PAB/CMP](https://github.com/Shuyu-XJTU/CMP) benchmark. Please follow the corresponding code, checkpoint, and dataset terms.
 
 ## 📄 License
 

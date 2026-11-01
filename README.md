@@ -8,7 +8,7 @@
     <a href="https://lee-zixu.github.io/"><strong>Zixu Li</strong></a><sup>1,†</sup> &nbsp;&nbsp;
     <a href="https://zivchen-ty.github.io/"><strong>Zhiwei Chen</strong></a><sup>1</sup> &nbsp;&nbsp;
     <a href="https://arcadiadream.github.io/HJL.github.io/"><strong>Jiale Huang</strong></a><sup>1</sup> &nbsp;&nbsp;
-    <strong>Fangxu Liu</strong><sup>1</sup> &nbsp;&nbsp;
+    <a href="https://github.com/Cunyulmm"><strong>Fangxu Liu</strong></a><sup>1</sup> &nbsp;&nbsp;
     <a href="https://jinhe-bi.github.io/"><strong>Jinhe Bi</strong></a><sup>2</sup> &nbsp;&nbsp;
     <a href="https://faculty.sdu.edu.cn/huyupeng1/zh_CN/index.htm"><strong>Yupeng Hu</strong></a><sup>1,✉</sup>
   </p>

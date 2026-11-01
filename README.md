@@ -1,7 +1,7 @@
 <a id="top"></a>
 
 <div align="center">
-  <img src="gradco-logo.png" alt="GradCO logo" width="210" />
+  <img src="gradco-logo.png" alt="GradCO logo: behavior-aware gradient-conflict offloading" width="520" />
   <h1>GradCO: Behavior-Aware Gradient-Conflict Offloading for Text-Based Person Anomaly Search</h1>
   <p>
     <a href="https://zhihfu.github.io/"><strong>Zhiheng Fu</strong></a><sup>1</sup> &nbsp;&nbsp;
